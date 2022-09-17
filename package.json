@@ -1,0 +1,23 @@
+{
+  "name": "seo-link-analyzer",
+  "version": "1.0.0",
+  "description": "report regarding seo of a website",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ronsamgeorge/SEO-link-analyzer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ronsamgeorge/SEO-link-analyzer/issues"
+  },
+  "homepage": "https://github.com/ronsamgeorge/SEO-link-analyzer#readme",
+  "devDependencies": {
+    "jest": "^29.0.3"
+  }
+}
