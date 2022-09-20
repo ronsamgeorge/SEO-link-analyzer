@@ -32,22 +32,22 @@ test('normalize http', () =>{
 
 
 test('covert relative to absolute',() => {
-    const input = '<<!DOCTYPE html><a href="/xyz">Relative Link</a>';
+    const input = '<!DOCTYPE html><a href="/xyz">Relative Link</a>';
     const baseURL = 'https://ron.dev/';
-    const expected = 'https://ron.dev/xyz';
+    const expected = ['https://ron.dev/xyz'];
     const received = getURLsFromHTML(input,baseURL);
 
-    expect(received[0]).toBe(expected);
+    expect(received).toEqual(expected);
 });
 
 
 test('total number of links in the HTML body',() => {
-    const input = '<<!DOCTYPE html><a href="/xyz">Link</a> <a href="/abc"> Link</a> <a href="https://ron.dev//hello"> Link</a>';
+    const input = '<<!DOCTYPE html><a href="/xyz">Link</a> <a href="/abc"> Link</a> <a href="https://ron.dev/hello"> Link</a>';
     const baseURL = 'https://ron.dev/';
-    const expected = 3;
+    const expected = ['https://ron.dev/xyz', 'https://ron.dev/abc','https://ron.dev/hello'];
     const received = getURLsFromHTML(input,baseURL);
 
-    expect(received.length).toBe(expected);
+    expect(received).toEqual(expected);
 });
 
 

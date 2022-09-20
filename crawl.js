@@ -24,22 +24,24 @@ function normalizeURL(url){
     const regAbsoURLPattern = new RegExp('^(?:[a-z]+:)?//', 'i');    //Regular expression to check if url present are absolute or relative
     const dom = new JSDOM(inputHTMLBody);
     const aTagList = dom.window.document.querySelectorAll("a");     //selects all the <a> tags
-    const URLList = [];                                             //stores the list of links : un-normalized
+    const URLList = [] ;                                             //stores the list of links : un-normalized
 
-    for(url of aTagList){
-        let link = url.href;
+    for(aTag of aTagList){
+        let link = aTag.href;
         if (!regAbsoURLPattern.test(link)){                         // to check if the given 
             link = `${baseURL}${link.substr(1)}`;                   //starts from 1 to remove an extra / preceeding the relative address
         }
 
         URLList.push(link);
     }
-    return (URLList);
+
+    console.log(URLList);
+    return URLList;
  }
 
 
 // for manual testing : 
-//  const htmlBody = `<!DOCTYPE html><p href="/xyz">Link</p> <p href="/xyz.com">Link</p>`; 
-//  getURLsFromHTML(htmlBody,'https://ron.dev/');
+ const htmlBody = `<!DOCTYPE html><a href="/xyz">Link</a> <a href="/xyz.com">Link</a>`; 
+ getURLsFromHTML(htmlBody,'https://ron.dev/');
 
 module.exports = {normalizeURL, getURLsFromHTML};
