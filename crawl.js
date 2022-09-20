@@ -34,11 +34,12 @@ function normalizeURL(url){
 
         URLList.push(link);
     }
-    console.log(typeof URLList);
     return (URLList);
  }
 
- const htmlBody = `<!DOCTYPE html><p href="/xyz">Link</p> <p href="/xyz.com">Link</p>`;
- getURLsFromHTML(htmlBody,'https://ron.dev/');
+
+// for manual testing : 
+//  const htmlBody = `<!DOCTYPE html><p href="/xyz">Link</p> <p href="/xyz.com">Link</p>`; 
+//  getURLsFromHTML(htmlBody,'https://ron.dev/');
 
 module.exports = {normalizeURL, getURLsFromHTML};
