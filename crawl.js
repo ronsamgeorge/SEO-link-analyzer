@@ -1,14 +1,14 @@
 const jsdom = require("jsdom");
 const {JSDOM} = jsdom;
 
-//Takes in a URL and noramlizes to format and get 
+//Takes in a URL and noramlizes to a format
 function normalizeURL(url){
 
     let lowerCasedURL = url.toLowerCase();
     const lenOfURL = url.length;
 
     if (lowerCasedURL[lenOfURL -1] === '/'){
-        lowerCasedURL = lowerCasedURL.substr(0,lenOfURL-1); //handles trailing slash after the pathname
+        lowerCasedURL = lowerCasedURL.substr(0,lenOfURL-1);     //handles trailing slash after the pathname
     }
 
     const link = new URL(lowerCasedURL);
@@ -40,8 +40,35 @@ function normalizeURL(url){
  }
 
 
+ //
+
+ async function crawlPage(baseURL){
+    try {
+        const response = await fetch(baseURL);
+
+        const responseCode = response.status;
+        if(responseCode >= 400){
+            console.log(`Received Error Code : ${responseCode}`);
+            return;
+        }
+
+        const responseContentType = response.headers.get('content-type'); 
+        if(!responseContentType.includes('text/html')){
+            console.log(`Content type Error. Expected : text/html, Received : ${responseContentType}`);
+            return;
+        }
+
+        console.log(await response.text());         //response.text() returns a promise 
+    }catch(err){
+        console.log(err);
+    }
+ }
+
+
 // for manual testing : 
- const htmlBody = `<!DOCTYPE html><a href="/xyz">Link</a> <a href="/xyz.com">Link</a>`; 
- getURLsFromHTML(htmlBody,'https://ron.dev/');
+//  const htmlBody = `<!DOCTYPE html><a href="/xyz">Link</a> <a href="/xyz.com">Link</a>`; 
+//  getURLsFromHTML(htmlBody,'https://ron.dev/');
+
+crawlPage('https://wagslane.dev');
 
 module.exports = {normalizeURL, getURLsFromHTML};
