@@ -1,3 +1,5 @@
+const {crawlPage} = require("./crawl.js");
+
 
 function main(){
     const args = process.argv.slice(2); //takes all Arguments from index 2,  excludes the first two : node path and file path
@@ -13,6 +15,7 @@ function main(){
     }
 
     console.log(`BaseURL received : ${args}. Analyzing starting .... `);
+    crawlPage(args);
 }
 
 main();

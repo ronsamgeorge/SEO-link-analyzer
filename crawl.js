@@ -69,6 +69,6 @@ function normalizeURL(url){
 //  const htmlBody = `<!DOCTYPE html><a href="/xyz">Link</a> <a href="/xyz.com">Link</a>`; 
 //  getURLsFromHTML(htmlBody,'https://ron.dev/');
 
-crawlPage('https://wagslane.dev');
+// crawlPage('https://wagslane.dev');
 
-module.exports = {normalizeURL, getURLsFromHTML};
+module.exports = {normalizeURL, getURLsFromHTML, crawlPage};
