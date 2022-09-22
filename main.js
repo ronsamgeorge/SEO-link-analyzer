@@ -1,7 +1,8 @@
 const {crawlPage} = require("./crawl.js");
+//const {crawlPage} = require("./crawlTest");
 
 
-function main(){
+async function main(){
     const args = process.argv.slice(2); //takes all Arguments from index 2,  excludes the first two : node path and file path
 
     if(args.length > 1){
@@ -15,7 +16,8 @@ function main(){
     }
 
     console.log(`BaseURL received : ${args}. Analyzing starting .... `);
-    crawlPage(args);
+    const report = (await crawlPage(args[0],args[0],{}));
+    console.log(report);
 }
 
 main();

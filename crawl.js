@@ -19,7 +19,8 @@ function normalizeURL(url){
 
 //takes in a string of HTML and return an array of all the link in that webpage
 // returns absolute URL, by concatinationg to baseURL 
- function getURLsFromHTML(inputHTMLBody, baseURL){
+
+function getURLsFromHTML(baseURL,inputHTMLBody){
 
     const regAbsoURLPattern = new RegExp('^(?:[a-z]+:)?//', 'i');    //Regular expression to check if url present are absolute or relative
     const dom = new JSDOM(inputHTMLBody);
@@ -29,46 +30,82 @@ function normalizeURL(url){
     for(aTag of aTagList){
         let link = aTag.href;
         if (!regAbsoURLPattern.test(link)){                         // to check if the given 
-            link = `${baseURL}${link.substr(1)}`;                   //starts from 1 to remove an extra / preceeding the relative address
+            link = `${baseURL}${link}`;                   //starts from 1 to remove an extra / preceeding the relative address
         }
 
         URLList.push(link);
     }
-
-    console.log(URLList);
     return URLList;
  }
 
 
- //
 
- async function crawlPage(baseURL){
+
+//Checks if the baseURL and the CurrentURL being crawled are of the same domain
+function isSameDomain(baseURL,currentURL){
+    const domainOfBase = new URL(baseURL).hostname;
+    const domainOfCurrent = new URL(currentURL).hostname;
+
+    if(domainOfBase !== domainOfCurrent){
+        return false;
+    }
+    return true;
+ }
+
+
+ 
+async function crawlPage(baseURL, currentURL, pages){
+  
+    if(!isSameDomain(baseURL,currentURL)){
+        return pages;
+    }
+
+    const normalizedCurrentURL = normalizeURL(currentURL);
+    if(pages[normalizedCurrentURL]> 0){
+        pages[normalizedCurrentURL]++;
+        return pages;
+    }
+
+    pages[normalizedCurrentURL] = 1;
+
+    console.log(`initiating crawl for : ${currentURL}`);
+    let htmlBody = '';
     try {
-        const response = await fetch(baseURL);
+        //console.log(normalizedCurrentURL);
+        const response = await fetch(currentURL);
 
         const responseCode = response.status;
         if(responseCode >= 400){
             console.log(`Received Error Code : ${responseCode}`);
-            return;
+            return pages;
         }
 
         const responseContentType = response.headers.get('content-type'); 
         if(!responseContentType.includes('text/html')){
             console.log(`Content type Error. Expected : text/html, Received : ${responseContentType}`);
-            return;
+            return pages;
         }
-
-        console.log(await response.text());         //response.text() returns a promise 
+        htmlBody = await response.text(); //response.text() returns a promise 
+        
     }catch(err){
-        console.log(err);
+        console.log(err.message);
     }
+
+                
+        const URLsFromBody = getURLsFromHTML(baseURL,htmlBody);
+        for(const link of URLsFromBody){
+            pages = await crawlPage(baseURL,link,pages);
+        }
+        return pages;
+    
  }
 
 
 // for manual testing : 
 //  const htmlBody = `<!DOCTYPE html><a href="/xyz">Link</a> <a href="/xyz.com">Link</a>`; 
 //  getURLsFromHTML(htmlBody,'https://ron.dev/');
-
 // crawlPage('https://wagslane.dev');
+//crawlPage('https://wagslane.dev','https://wagslane.dev',{});
+
 
 module.exports = {normalizeURL, getURLsFromHTML, crawlPage};
