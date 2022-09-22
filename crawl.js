@@ -71,7 +71,6 @@ async function crawlPage(baseURL, currentURL, pages){
     console.log(`initiating crawl for : ${currentURL}`);
     let htmlBody = '';
     try {
-        //console.log(normalizedCurrentURL);
         const response = await fetch(currentURL);
 
         const responseCode = response.status;
@@ -91,12 +90,12 @@ async function crawlPage(baseURL, currentURL, pages){
         console.log(err.message);
     }
 
-                
-        const URLsFromBody = getURLsFromHTML(baseURL,htmlBody);
-        for(const link of URLsFromBody){
-            pages = await crawlPage(baseURL,link,pages);
-        }
-        return pages;
+    //get links from the htmlBody and recursively crawl for all the links   
+    const URLsFromBody = getURLsFromHTML(baseURL,htmlBody);
+    for(const link of URLsFromBody){
+        pages = await crawlPage(baseURL,link,pages);
+    }
+    return pages;
     
  }
 
