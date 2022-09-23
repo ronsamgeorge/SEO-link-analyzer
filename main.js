@@ -1,5 +1,5 @@
 const {crawlPage} = require("./crawl.js");
-//const {crawlPage} = require("./crawlTest");
+const {printReport} = require("./report.js");
 
 
 async function main(){
@@ -17,7 +17,7 @@ async function main(){
 
     console.log(`BaseURL received : ${args}. Analyzing starting .... `);
     const report = (await crawlPage(args[0],args[0],{}));
-    console.log(report);
+    printReport(report);
 }
 
 main();
